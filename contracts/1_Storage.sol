@@ -4,9 +4,7 @@ pragma solidity >=0.8.2 <0.9.0;
 
 contract Storage {
 
-    uint256 number; //comentario agregado
-
-    
+    uint256 number; // Este es un entero sin signo
 
     function store(uint256 num) public {
         number = num;
