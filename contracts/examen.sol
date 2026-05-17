@@ -9,7 +9,7 @@ contract StreamingMusical256023 {
         uint256 id;
         string titulo;
         uint256 duracion;
-        bool estado;
+        bool estado; 
     }
 
     Cancion[] public canciones;
@@ -37,5 +37,18 @@ contract StreamingMusical256023 {
 
     function contarElementos() public view registrarEjecucion returns (uint256) {
         return canciones.length;
+    }
+
+    function inactivarElemento(uint256 _posicion) public registrarEjecucion {
+        require(_posicion < canciones.length, "La posicion introducida no existe en el arreglo");
+        canciones[_posicion].estado = false;
+    }
+
+    function pintarElementosImpares() public view registrarEjecucion {
+        for (uint256 i = 0; i < canciones.length; i++) {
+            if (canciones[i].id % 2 != 0) {
+                console.log("Cancion ID impar:", canciones[i].id, canciones[i].titulo);
+            }
+        }
     }
 }
