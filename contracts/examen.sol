@@ -12,7 +12,9 @@ contract StreamingMusical256023 {
         bool estado; 
     }
 
-    Cancion[] public canciones;
+    mapping(uint256 => Cancion) public canciones;
+    
+    uint256 public cantidad;
     address public dirContrato;
 
     modifier registrarEjecucion() {
@@ -27,25 +29,25 @@ contract StreamingMusical256023 {
 
     function agregarElemento(uint256 _id, string memory _titulo, uint256 _duracion, bool _estado) public registrarEjecucion {
         require(_duracion > 0, "La duracion debe ser mayor a cero segundos");
+        
+        require(canciones[_id].id == 0, "El ID de la cancion ya existe");
 
-        for (uint256 i = 0; i < canciones.length; i++) {
-            require(canciones[i].id != _id, "El ID de la cancion ya existe");
-        }
-
-        canciones.push(Cancion(_id, _titulo, _duracion, _estado));
+        canciones[_id] = Cancion(_id, _titulo, _duracion, _estado);
+        
+        cantidad++;
     }
 
     function contarElementos() public view registrarEjecucion returns (uint256) {
-        return canciones.length;
+        return cantidad;
     }
 
-    function inactivarElemento(uint256 _posicion) public registrarEjecucion {
-        require(_posicion < canciones.length, "La posicion introducida no existe en el arreglo");
-        canciones[_posicion].estado = false;
+    function inactivarElemento(uint256 _id) public registrarEjecucion {
+        require(canciones[_id].id != 0, "El ID introducido no existe");
+        canciones[_id].estado = false;
     }
 
     function pintarElementosImpares() public view registrarEjecucion {
-        for (uint256 i = 0; i < canciones.length; i++) {
+        for (uint256 i = 1; i <= cantidad; i++) {
             if (canciones[i].id % 2 != 0) {
                 console.log("Cancion ID impar:", canciones[i].id, canciones[i].titulo);
             }
